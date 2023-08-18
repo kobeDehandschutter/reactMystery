@@ -1,26 +1,27 @@
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import routes from '../main.routes';
 import { render, screen } from '@testing-library/react';
-import { IdentityContext } from '../contexts/IdentityContext';
+import * as translation from '../hooks/useTranslation';
+import { mocked } from 'jest-mock';
 
-it('renders by default', () => {
-  render(<RouterProvider router={createMemoryRouter(routes)} />);
+jest.mock('../hooks/useTranslation.ts');
 
-  screen.getByRole('heading', { name: 'Home' });
+describe('', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  const loginLink = screen.getByRole('link', { name: 'login' });
-  expect(loginLink).toHaveAttribute('href', '/login');
-});
+  it('default should be english', () => {
+    mocked(translation).default.mockReturnValue(() => 'Home');
+    render(<RouterProvider router={createMemoryRouter(routes)} />);
 
-it('renders a personalised greeting when authenticated', () => {
-  render(
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    <IdentityContext.Provider value={{ currentIdentity: 'tester', setCurrentIdentity: () => {} }}>
-      <RouterProvider router={createMemoryRouter(routes)} />
-    </IdentityContext.Provider>,
-  );
-
-  expect(screen.queryByRole('link', { name: 'login' })).not.toBeInTheDocument();
-
-  screen.getByText('Welcome, tester');
+    screen.getByRole('heading', { name: 'Home' });
+    expect(translation.default).toHaveBeenCalledTimes(1);
+  });
+  it('should be dutch', () => {
+    mocked(translation).default.mockReturnValue(() => 'Thuis');
+    render(<RouterProvider router={createMemoryRouter(routes)} />);
+    screen.getByRole('heading', { name: 'Thuis' });
+    expect(translation.default).toHaveBeenCalledTimes(1);
+  });
 });
