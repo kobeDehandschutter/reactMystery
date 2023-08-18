@@ -1,6 +1,6 @@
 import useTranslation from './useTranslation';
 
-describe('', () => {
+describe('test the useTranslation hook', () => {
   it('tests english translation hook', () => {
     const t = useTranslation('en');
 
@@ -18,8 +18,9 @@ describe('', () => {
   });
   it('tests unknown key translation hook', () => {
     const t = useTranslation();
+    const key = 'unknown.key';
 
-    expect(t('unknown.key')).toStrictEqual('unknown.key');
+    expect(t(key)).toStrictEqual(key);
   });
   it('tests key nesting to far ', () => {
     const t = useTranslation();

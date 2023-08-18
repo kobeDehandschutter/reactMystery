@@ -6,7 +6,7 @@ import { mocked } from 'jest-mock';
 
 jest.mock('../hooks/useTranslation.ts');
 
-describe('', () => {
+describe('test multilanguage home page', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
