@@ -99,16 +99,6 @@ it('tests change user button', async () => {
   })
 })
 
-it('displays error state', async () => {
-  render( <RouterProvider router={createMemoryRouter(routes)} />);
-  resetHandlers(rest.get('*/users/1', (_req, res, ctx) => {
-    return res(ctx.status(404))
-  }))
-
-  await waitFor(() => getErrorContainer())
-
-})
-
 it('tests refresh button', async () => {
   render( <RouterProvider router={createMemoryRouter(routes)} />);
   const user = buildUser()

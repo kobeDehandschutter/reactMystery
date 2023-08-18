@@ -13,9 +13,10 @@ const Home = () => {
   const {data, isLoading, error, mutate} = useFetch<User>(process.env.REACT_APP_API_BASE_URL + "/users/" + counter, {initialValue: {
     id: 1,
     email: "init",
-    firstName: "init first",
-    lastName: "init last"
+    firstName: "firstname",
+    lastName: "lastname"
   }})
+  const {data: dataList, isLoading: listIsLoading, error: listError} = useFetch<User[]>(process.env.REACT_APP_API_BASE_URL + "/users?_page=" + counter)
   const { currentIdentity } = useContext(IdentityContext);
 
   const changeUrlHandler = () => {
@@ -45,6 +46,16 @@ const Home = () => {
 
       <button onClick={changeUrlHandler}>change url</button>
       <button onClick={mutate}>refresh</button>
+
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+
+      {listIsLoading && <p>Load list</p>}
+      {listError && <p>Err LIST - {listError.message}</p>}
+      {(dataList !== null && !listError && !listIsLoading) && dataList.map(t => <p key={t.id}>{t.firstName}</p>)}
+
     </div>
   );
 };

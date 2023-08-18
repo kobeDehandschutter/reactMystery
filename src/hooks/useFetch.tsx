@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetcher, isAbortError } from "../utils/fetcher";
 import { HttpStatusError } from "../utils/http-status-error";
 
@@ -19,9 +19,9 @@ export default function useFetch<T>(url: string, options: FetchOptions<T> = {}):
   const [error, setError] = useState<Error | null>(null)
   const [refresh, setRefresh] = useState(false)
 
-  const mutate = () => {
+  const mutate = useCallback(() => {
     setRefresh(!refresh)
-  }
+  }, [refresh])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -36,15 +36,15 @@ export default function useFetch<T>(url: string, options: FetchOptions<T> = {}):
         else if(isAbortError(e)) return
         else if(e instanceof Error) setError(e)
       }
-        setIsLoading(false)
+      setIsLoading(false)
     }
+
     setIsLoading(true)
     setError(null)
     fetchData()
 
-    return () => {
-      abortController.abort()
-    }
+    return () => abortController.abort()
+
   }, [url, refresh])
 
 
