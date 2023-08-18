@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { fetcher } from "../utils/fetcher";
+import { fetcher, isAbortError } from "../utils/fetcher";
 import { HttpStatusError } from "../utils/http-status-error";
 
 interface FetchResult<T> {
   isLoading: boolean;
   data: T | null;
   error: Error | null;
+  mutate: () => void
 }
 
 interface FetchOptions<T> {
@@ -16,6 +17,11 @@ export default function useFetch<T>(url: string, options: FetchOptions<T> = {}):
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<T | null>(options.initialValue??null)
   const [error, setError] = useState<Error | null>(null)
+  const [refresh, setRefresh] = useState(false)
+
+  const mutate = () => {
+    setRefresh(!refresh)
+  }
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -27,25 +33,26 @@ export default function useFetch<T>(url: string, options: FetchOptions<T> = {}):
       }
       catch(e){
         if(e instanceof HttpStatusError) setError(new Error(e.statusText))
+        else if(isAbortError(e)) return
         else if(e instanceof Error) setError(e)
-      }finally{
-        setIsLoading(false)
       }
+        setIsLoading(false)
     }
-
-    setError(null)
     setIsLoading(true)
+    setError(null)
     fetchData()
 
     return () => {
       abortController.abort()
     }
-  }, [url])
+  }, [url, refresh])
+
 
   return {
     isLoading: isLoading,
     data: data,
-    error: error
+    error: error,
+    mutate: mutate
   }
 }
 
