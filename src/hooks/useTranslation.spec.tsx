@@ -28,6 +28,13 @@ describe('test the useTranslation hook', () => {
 
     expect(t(key)).toStrictEqual(key);
   });
+
+  it('tests key nesting to far should work', () => {
+    const t = useTranslation();
+    const key = 'test.test2.test3';
+
+    expect(t(key)).toStrictEqual('Waarde');
+  });
   it('tests key nesting not far enough far ', () => {
     const t = useTranslation();
     const key = 'home';

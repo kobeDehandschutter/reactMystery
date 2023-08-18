@@ -6,7 +6,7 @@ import useTranslation from '../hooks/useTranslation';
 export const HomePageDataTestId = 'home-page';
 
 const Home = () => {
-  const t = useTranslation('nl');
+  const t = useTranslation();
   const { currentIdentity } = useContext(IdentityContext);
 
   return (

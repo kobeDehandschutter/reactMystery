@@ -6,7 +6,9 @@ const translations = {
   },
   en: {
     test: {
-      test2: 't',
+      test2: {
+        test3: 'Waarde',
+      },
     },
     home: {
       title: 'Home',
@@ -38,8 +40,7 @@ function useTranslation(language: 'en' | 'nl' = 'en'): (key: string) => string {
     if (!(typeof current === 'string')) {
       current = key;
     }
-    const result = current as unknown as string;
-    return result;
+    return current;
   };
 }
 
