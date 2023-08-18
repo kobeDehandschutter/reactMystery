@@ -19,8 +19,8 @@ const Home = () => {
   const { currentIdentity } = useContext(IdentityContext);
 
   const changeUrlHandler = () => {
-    setCounter(c => c+1)
-  }
+    setCounter((c) => c + 1);
+  };
 
   return (
     <div data-testid={HomePageDataTestId}>
